@@ -67,6 +67,23 @@ function scrubAnthropicRefusalMagic(prompt: string): string {
   );
 }
 
+/**
+ * Executes an embedded Pi agent run.
+ *
+ * This function orchestrates the agent execution loop, including:
+ * - Session lane resolution and locking.
+ * - Context window management and guard checks.
+ * - Authentication profile resolution and rotation.
+ * - Tool execution and result handling.
+ * - Failover handling for model errors.
+ * - "Thinking" level management (reasoning models).
+ *
+ * It runs within the same process (embedded) and uses the provided configuration
+ * and skills snapshot.
+ *
+ * @param params - Parameters for the run, including session ID, prompt, and config.
+ * @returns A promise that resolves to the run result, including payloads (responses) and metadata.
+ */
 export async function runEmbeddedPiAgent(
   params: RunEmbeddedPiAgentParams,
 ): Promise<EmbeddedPiRunResult> {

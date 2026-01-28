@@ -4,6 +4,10 @@ import { requireActivePluginRegistry } from "../plugins/runtime.js";
 
 // Channel docking: add new core channels here (order + meta + aliases), then
 // register the plugin in its extension entrypoint and keep protocol IDs in sync.
+/**
+ * Ordered list of supported chat channels.
+ * This determines the order in which they appear in lists or menus.
+ */
 export const CHAT_CHANNEL_ORDER = [
   "telegram",
   "whatsapp",
@@ -14,6 +18,9 @@ export const CHAT_CHANNEL_ORDER = [
   "imessage",
 ] as const;
 
+/**
+ * Union type of all supported chat channel IDs.
+ */
 export type ChatChannelId = (typeof CHAT_CHANNEL_ORDER)[number];
 
 export const CHANNEL_IDS = [...CHAT_CHANNEL_ORDER] as const;
@@ -24,6 +31,10 @@ export type ChatChannelMeta = ChannelMeta;
 
 const WEBSITE_URL = "https://molt.bot";
 
+/**
+ * Metadata for each supported chat channel.
+ * Includes labels, documentation paths, and system images.
+ */
 const CHAT_CHANNEL_META: Record<ChatChannelId, ChannelMeta> = {
   telegram: {
     id: "telegram",
@@ -111,6 +122,9 @@ const normalizeChannelKey = (raw?: string | null): string | undefined => {
   return normalized || undefined;
 };
 
+/**
+ * Returns a list of metadata for all supported chat channels.
+ */
 export function listChatChannels(): ChatChannelMeta[] {
   return CHAT_CHANNEL_ORDER.map((id) => CHAT_CHANNEL_META[id]);
 }
@@ -119,10 +133,17 @@ export function listChatChannelAliases(): string[] {
   return Object.keys(CHAT_CHANNEL_ALIASES);
 }
 
+/**
+ * Retrieves metadata for a specific chat channel ID.
+ */
 export function getChatChannelMeta(id: ChatChannelId): ChatChannelMeta {
   return CHAT_CHANNEL_META[id];
 }
 
+/**
+ * Normalizes a potential channel ID or alias into a canonical `ChatChannelId`.
+ * Returns `null` if the ID is not recognized.
+ */
 export function normalizeChatChannelId(raw?: string | null): ChatChannelId | null {
   const normalized = normalizeChannelKey(raw);
   if (!normalized) return null;

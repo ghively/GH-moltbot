@@ -89,17 +89,29 @@ const logPlugins = log.child("plugins");
 const logWsControl = log.child("ws");
 const canvasRuntime = runtimeForLogger(logCanvas);
 
+/**
+ * Represents a running Gateway server instance.
+ */
 export type GatewayServer = {
+  /**
+   * Closes the gateway server and releases all resources.
+   * @param opts - Closure options.
+   * @param opts.reason - The reason for closing.
+   * @param opts.restartExpectedMs - If set, indicates a restart is expected in N milliseconds.
+   */
   close: (opts?: { reason?: string; restartExpectedMs?: number | null }) => Promise<void>;
 };
 
+/**
+ * Options for configuring the Gateway server on startup.
+ */
 export type GatewayServerOptions = {
   /**
    * Bind address policy for the Gateway WebSocket/HTTP server.
-   * - loopback: 127.0.0.1
-   * - lan: 0.0.0.0
-   * - tailnet: bind only to the Tailscale IPv4 address (100.64.0.0/10)
-   * - auto: prefer loopback, else LAN
+   * - `loopback`: 127.0.0.1
+   * - `lan`: 0.0.0.0
+   * - `tailnet`: bind only to the Tailscale IPv4 address (100.64.0.0/10)
+   * - `auto`: prefer loopback, else LAN
    */
   bind?: import("../config/config.js").GatewayBindMode;
   /**
@@ -144,6 +156,17 @@ export type GatewayServerOptions = {
   ) => Promise<void>;
 };
 
+/**
+ * Starts the Gateway Server.
+ *
+ * This function initializes the HTTP and WebSocket servers, loads configuration,
+ * starts the discovery service, initializes the agent runtime, and sets up
+ * background maintenance tasks.
+ *
+ * @param port - The port to listen on (default: 18789).
+ * @param opts - Configuration options.
+ * @returns A promise that resolves to the running server instance.
+ */
 export async function startGatewayServer(
   port = 18789,
   opts: GatewayServerOptions = {},

@@ -104,6 +104,22 @@ export const __testing = {
   assertRequiredParams,
 } as const;
 
+/**
+ * Creates the set of tools available to the Moltbot agent.
+ *
+ * This includes:
+ * - Coding tools (read, write, edit files).
+ * - Execution tools (shell commands).
+ * - Application tools (browser control, gateway control).
+ * - Channel-specific tools.
+ * - Plugin tools.
+ *
+ * It applies tool policies (permissions) based on the session context, agent configuration,
+ * and user roles to filter the available tools.
+ *
+ * @param options - Configuration options for tool creation and policy resolution.
+ * @returns An array of tool definitions ready for use by the agent.
+ */
 export function createMoltbotCodingTools(options?: {
   exec?: ExecToolDefaults & ProcessToolDefaults;
   messageProvider?: string;
